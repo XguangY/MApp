@@ -1,12 +1,13 @@
 <template>
     <div class="singer">
-        歌手页面
+        <list-view :data="singers"></list-view>
     </div>
 </template>
 <script>
 import { getSingerList } from 'api/singer'
 import { ERR_OK } from 'api/config'
 import Singer from 'common/js/singer'
+import ListView from 'base/listview/listview'
 const HOT_NAME = '热门'
 const HOT_LEN = 10
 export default {
@@ -18,14 +19,15 @@ export default {
   created () {
     this._getSingerList()
   },
-
+  components: {
+    ListView
+  },
   methods: {
     _getSingerList () {
       getSingerList()
         .then(res => {
           if (res.code === ERR_OK) {
-            this.singers = res.data.list
-            console.log(this._nomollizeSinger(this.singers))
+            this.singers = this._nomollizeSinger(res.data.list)
           }
         })
     },
@@ -74,10 +76,9 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-  .singer {
-      display: flex
-      top: 88px
-      bottom: 0
-      width: 100%
-  }
+  .singer
+    position: fixed
+    top: 88px
+    bottom: 0
+    width: 100%
 </style>
